@@ -5,6 +5,7 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
+    "postinstall": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,6 +30,7 @@
   "dependencies": {
     "@types/node": "^10.5.2",
     "@types/shelljs": "^0.8.0",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "typescript": "^2.9.2"
   }
 }
