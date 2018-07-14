@@ -46,13 +46,13 @@ export class BotConfig {
         return this;
     }
     private parseBotFile(): BotConfiguration {
-        var botFile = (this.botFilePath !== null) ? this.botFilePath : this.getBotFileInDirectory();
+        let botFile = (this.botFilePath !== null) ? this.botFilePath : this.getBotFileInDirectory();
         return this.parse(botFile);
     }
     private getBotFileInDirectory(): string {
-        var botFile: string;
-        var dir = shelljs.pwd().toString();
-        var files: string[] = fs.readdirSync(dir);
+        let botFile: string;
+        let dir = shelljs.pwd().toString();
+        let files: string[] = fs.readdirSync(dir);
         files.forEach((f: string) => {
             if(f.endsWith(".bot")) {
                 if(botFile !== null) {
@@ -67,7 +67,7 @@ export class BotConfig {
         return botFile;
     }
     private parse(botFile: string): BotConfiguration {
-        var f: string = fs.readFileSync(botFile, "utf-8"); //Might need to account for other encodings.
+        let f: string = fs.readFileSync(botFile, "utf-8"); //Might need to account for other encodings.
         return <BotConfiguration>JSON.parse(f);
     }
     private getService(type: string): Service | Service[] {
@@ -83,7 +83,7 @@ export class BotConfig {
         }
     }
     private parseService(type: string): Service | Service[] {
-        var services: Service[] = [];
+        let services: Service[] = [];
         this._botConfiguration.services.forEach((s: Service, idx: number) => {
             if(s.type === type) {
                 services.push(this.decrypt(s));
@@ -98,7 +98,7 @@ export class BotConfig {
         if(this.secret === null) {
             return s;
         }
-        var encryptedProps: string[] = this._encryptedProperties[s.type];
+        let encryptedProps: string[] = this._encryptedProperties[s.type];
         for(let k in s) {
             if(s.hasOwnProperty(k) && encryptedProps.indexOf(k) != -1) {
                 s[k] = this.decryptValue(s[k]);
@@ -122,7 +122,7 @@ export class BotConfig {
     public Endpoint(): Service | Service[] {
         return this.parseService("endpoint");
     }
-    public BotService(): Service | Service[] {
+    public AzureBotService(): Service | Service[] {
         return this.parseService("abs");
     }
     public LUIS(): Service | Service[] {
