@@ -75,7 +75,7 @@ export class BotConfig {
             case "endpoint":
             case "abs":
             case "luis":
-            case "qnamaker":
+            case "qna":
             case "dispatch":
                 this.parseService(type);
             default:
@@ -100,17 +100,24 @@ export class BotConfig {
         }
         var encryptedProps: string[] = this._encryptedProperties[s.type];
         for(let k in s) {
-            if(s.hasOwnProperty(k) && encryptedProps.indexOf(k)) {
+            if(s.hasOwnProperty(k) && encryptedProps.indexOf(k) != -1) {
                 s[k] = this.decryptValue(s[k]);
             }
         }
         return s;
     }
     private decryptValue(v: string): string {
-        const decipher = crypto.createDecipher('aes192', this.secret);
-        let value = decipher.update(v, 'hex', 'utf8');
-        value += decipher.final('utf8');
-        return value;
+        let orig = v;
+        try {
+            const decipher = crypto.createDecipher('aes192', this.secret);
+            let value = decipher.update(v, 'hex', 'utf8');
+            value += decipher.final('utf8');
+            return value;
+        }
+        catch(e) {
+            console.log(`Error: Failed to decrypt value ${orig}. Maybe you already decrypted it. Returning original value.`);
+            return orig;
+        }
     }
     public Endpoint(): Service | Service[] {
         return this.parseService("endpoint");
@@ -122,7 +129,7 @@ export class BotConfig {
         return this.parseService("luis");
     }
     public QnAMaker(): Service | Service[] {
-        return this.parseService("qnamaker");
+        return this.parseService("qna");
     }
     public Dispatch(): Service | Service[] {
         return this.parseService("dispatch");
