@@ -1,3 +1,4 @@
+import { BotConfiguration, Service, EndpointService, AzureBotService, LUISService, QnAMakerService, DispatchService } from "./types"
 import * as fs from "fs";
 import * as shelljs from "shelljs";
 import * as path from "path";
@@ -6,32 +7,6 @@ import * as crypto from "crypto";
 /**
  * @module botbuilder-config
  */
-
-export interface Service {
-    type?: string
-    , encryptionChecked?: boolean
-    , name?: string
-    , id?: string
-    , appId?: string
-    , appPassword?: string
-    , endpoint?: string
-    , endpointKey?: string
-    , tenantId?: string
-    , resourceGroup?: string
-    , version?: string
-    , authoringKey?: string
-    , subscriptionId?: string
-    , subscriptionKey?: string
-    , kbId?: string
-    , hostname?: string
-}
-
-export interface BotConfiguration {
-    name?: string
-    , description?: string
-    , secretKey?: string
-    , services: Service[]
-}
 
 export class BotConfig {
     private _botConfiguration: BotConfiguration;
@@ -129,19 +104,19 @@ export class BotConfig {
             return orig;
         }
     }
-    public Endpoint(name?: string): Service {
+    public Endpoint(name?: string): EndpointService {
         return this.parseService("endpoint", name);
     }
-    public AzureBotService(name?: string): Service {
+    public AzureBotService(name?: string): AzureBotService {
         return this.parseService("abs", name);
     }
-    public LUIS(name?: string): Service {
+    public LUIS(name?: string): LUISService {
         return this.parseService("luis", name);
     }
-    public QnAMaker(name?: string): Service {
+    public QnAMaker(name?: string): QnAMakerService {
         return this.parseService("qna", name);
     }
-    public Dispatch(name?: string): Service {
+    public Dispatch(name?: string): DispatchService {
         return this.parseService("dispatch", name);
     }
 }
