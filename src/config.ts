@@ -9,14 +9,18 @@ import * as crypto from "crypto";
 
 export interface Service {
     type: string
+    , encryptionChecked: boolean
     , name?: string
     , id?: string
     , appId?: string
     , appPassword?: string
     , endpoint?: string
     , endpointKey?: string
+    , tenantId?: string
+    , resourceGroup?: string
     , version?: string
     , authoringKey?: string
+    , subscriptionId?: string
     , subscriptionKey?: string
     , kbId?: string
     , hostname?: string
@@ -32,12 +36,12 @@ export interface BotConfiguration {
 export class BotConfig {
     private _botConfiguration: BotConfiguration;
     private readonly _encryptedProperties = {
-        endpoint: ['appPassword'],
-        abs: ['appPassword'],
-        luis: ['authoringKey', 'subscriptionKey'],
-        qna: ['subscriptionKey'],
-        dispatch: ['authoringKey', 'subscriptionKey']
-    };
+        endpoint: ["appPassword"],
+        abs: ["appPassword"],
+        luis: ["authoringKey", "subscriptionKey"],
+        qna: ["subscriptionKey"],
+        dispatch: ["authoringKey", "subscriptionKey"]
+    }; //Encrypted properties sourced from Microsoft's MSBot CLI source code.
     constructor(private readonly botFilePath?: string, private readonly secret?: string) {
         this.init();
     }
@@ -86,6 +90,7 @@ export class BotConfig {
         let services: Service[] = [];
         this._botConfiguration.services.forEach((s: Service, idx: number) => {
             if(s.type === type) {
+                s.encryptionChecked = false;
                 services.push(this.decrypt(s));
             }
         });
@@ -95,24 +100,26 @@ export class BotConfig {
         return (services.length === 1 ? services[0] : services);
     }
     private decrypt(s: Service): Service {
-        if(this.secret === null) {
+        if(this.secret === null || s.encryptionChecked === true) {
+            s.encryptionChecked = true;
             return s;
         }
         let encryptedProps: string[] = this._encryptedProperties[s.type];
         for(let k in s) {
             if(s.hasOwnProperty(k) && encryptedProps.indexOf(k) != -1) {
-                s[k] = this.decryptValue(s[k]);
+                s[k] = this.decryptProperty(s[k]);
             }
         }
+        s.encryptionChecked = true;
         return s;
     }
-    private decryptValue(v: string): string {
+    private decryptProperty(v: string): string {
         let orig = v;
         try {
-            const decipher = crypto.createDecipher('aes192', this.secret);
-            let value = decipher.update(v, 'hex', 'utf8');
-            value += decipher.final('utf8');
-            return value;
+            let decipher = crypto.createDecipher("aes192", this.secret); //Decryption values sourced from Microsoft's MSBot CLI source code. If this breaks, look there to see if values have changed.
+            let prop = decipher.update(v, "hex", "utf8");
+            prop += decipher.final("utf8");
+            return prop;
         }
         catch(e) {
             console.log(`Error: Failed to decrypt value ${orig}. Maybe you already decrypted it. Returning original value.`);

@@ -10,18 +10,34 @@ To install:
 
 ## Usage
 
+### JavaScript
+
+To import the module:
+
+    let { BotConfig } = require("botbuilder-config");
+
 To instantiate the configuration:
 
     let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
+
+###TypeScript
+
+To import the module:
+
+    import { BotConfig } from "botbuilder-config";
+
+To instantiate the configuration:
+
+    let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
+
+### Services
 
 To access a bot service:
 
     let qna = c.QnAMaker(); //returns an object with all the properties of the QnA maker service in the bot file OR an array of QnA Maker services from the file, if there are more than one.
     qna.endpoint; //Access the "endpoint" property of the QnA Maker service.
 
-### Services
-
-Given the above instantiation, you can access each service (or an array of like services) by calling the method that matches the service:
+Given the above instantiation (where `c` is the `BotConfig` object), you can access each service (or an array of like services) by calling the method that matches the service:
 
 * `c.Endpoint()`
 * `c.AzureBotService()`
