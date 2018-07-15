@@ -20,7 +20,7 @@ To instantiate the configuration:
 
     let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
 
-###TypeScript
+### TypeScript
 
 To import the module:
 
