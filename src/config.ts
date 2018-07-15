@@ -74,7 +74,7 @@ export class BotConfig {
         let f: string = fs.readFileSync(botFile, "utf-8"); //Might need to account for other encodings.
         return <BotConfiguration>JSON.parse(f);
     }
-    private getService(type: string): Service | Service[] {
+    private getService(type: string): Service {
         switch(type.toLowerCase()) {
             case "endpoint":
             case "abs":
@@ -86,18 +86,21 @@ export class BotConfig {
                 throw new Error("Error: Invalid Bot Service [type] specified.");
         }
     }
-    private parseService(type: string): Service | Service[] {
+    private parseService(type: string, name?: string): Service {
         let services: Service[] = [];
         this._botConfiguration.services.forEach((s: Service, idx: number) => {
-            if(s.type === type) {
+            if(s.type === type && (name == null || s.name === name)) {
                 s.encryptionChecked = false;
                 services.push(this.decrypt(s));
             }
         });
         if(services.length === 0) {
+            if(name != null) {
+                throw new Error(`Error: No services of type: ${type} and name: ${name} found in your bot file.`);
+            }
             throw new Error(`Error: No services of type: ${type} found in your bot file.`);
         }
-        return (services.length === 1 ? services[0] : services);
+        return services[0];
     }
     private decrypt(s: Service): Service {
         if(this.secret === null || s.encryptionChecked === true) {
@@ -126,19 +129,19 @@ export class BotConfig {
             return orig;
         }
     }
-    public Endpoint(): Service | Service[] {
-        return this.parseService("endpoint");
+    public Endpoint(name?: string): Service {
+        return this.parseService("endpoint", name);
     }
-    public AzureBotService(): Service | Service[] {
-        return this.parseService("abs");
+    public AzureBotService(name?: string): Service {
+        return this.parseService("abs", name);
     }
-    public LUIS(): Service | Service[] {
-        return this.parseService("luis");
+    public LUIS(name?: string): Service {
+        return this.parseService("luis", name);
     }
-    public QnAMaker(): Service | Service[] {
-        return this.parseService("qna");
+    public QnAMaker(name?: string): Service {
+        return this.parseService("qna", name);
     }
-    public Dispatch(): Service | Service[] {
-        return this.parseService("dispatch");
+    public Dispatch(name?: string): Service {
+        return this.parseService("dispatch", name);
     }
 }
