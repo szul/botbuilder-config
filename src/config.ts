@@ -8,8 +8,8 @@ import * as crypto from "crypto";
  */
 
 export interface Service {
-    type: string
-    , encryptionChecked: boolean
+    type?: string
+    , encryptionChecked?: boolean
     , name?: string
     , id?: string
     , appId?: string
