@@ -35,6 +35,7 @@ export interface LUISService extends Service {
     , version?: string
     , authoringKey?: string
     , subscriptionKey?: string
+    , endpointBasePath?: string
 };
 
 export interface QnAMakerService extends Service {
