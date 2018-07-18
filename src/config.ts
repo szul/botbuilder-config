@@ -7,6 +7,7 @@ import { QnAMakerService } from "./qnamaker";
 import * as fs from "fs";
 import * as shelljs from "shelljs";
 import * as path from "path";
+import * as crypto from "crypto";
 
 /**
  * @module botbuilder-config
@@ -87,6 +88,18 @@ export class BotConfig implements IBotConfiguration {
                 this.parseService(type, name);
             default:
                 throw new Error("Error: Invalid Bot Service [type] specified.");
+        }
+    }
+    public decrypt(value: string, secret: string): string {
+        //Decryption values sourced from Microsoft's MSBot CLI source code. If this breaks, look there to see if values have changed.
+        try {
+            const decipher = crypto.createDecipher("aes192", secret);
+            let prop = decipher.update(value, "hex", "utf8");
+            prop += decipher.final("utf8");
+            return prop;
+        }
+        catch(e) {
+            console.log(`Error: Decryption for ${value} failed.`);
         }
     }
     public Endpoint(name?: string): EndpointService {

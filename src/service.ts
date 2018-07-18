@@ -1,5 +1,3 @@
-import * as crypto from "crypto";
-
 /**
  * @module botbuilder-config
  */
@@ -9,7 +7,8 @@ export interface IBotConfiguration {
     , description?: string
     , secretKey?: string
     , services: IServiceBase[]
-    , getService: (type: string, name?: string) => Service;
+    , getService: (type: string, name?: string) => Service
+    , decrypt: (value: string, secret: string) => string
 };
 
 export interface IServiceBase {
@@ -21,7 +20,6 @@ export interface IServiceBase {
 export interface IService extends IServiceBase {
     add: (name: string, value: string) => boolean
     , remove: (name: string) => boolean
-    , decrypt: (value: string, secret: string) => string
 };
 
 export interface IEndpointService extends IService {
@@ -83,18 +81,6 @@ export class Service implements IService {
         }
         catch(e) {
             return false;
-        }
-    }
-    public decrypt(value: string, secret: string): string {
-        //Decryption values sourced from Microsoft's MSBot CLI source code. If this breaks, look there to see if values have changed.
-        try {
-            const decipher = crypto.createDecipher("aes192", secret);
-            let prop = decipher.update(value, "hex", "utf8");
-            prop += decipher.final("utf8");
-            return prop;
-        }
-        catch(e) {
-            console.log(`Error: Decryption for ${value} failed.`);
         }
     }
 }

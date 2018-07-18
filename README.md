@@ -54,5 +54,5 @@ Given the above instantiation (where `c` is the `BotConfig` object), you can acc
 You could load and access the bot file by simply loading the bot file as JSON into your application. The advantage of this library is that it will decrypt your properties, if you have encrypted them with a secret.
 
     let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
-    let s = c.QnAMaker().subscriptionKey;
+    let s = c.decrypt(c.QnAMaker().subscriptionKey, c.secret)
     console.log(s); //"s" will be decrypted;
