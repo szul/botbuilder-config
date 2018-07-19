@@ -25,7 +25,7 @@ export class BotConfig implements IBotConfiguration {
     public description: string;
     public secretKey: string;
     public services: IServiceBase[];
-    constructor(private readonly botFilePath?: string, private readonly secret?: string) {
+    constructor(public readonly botFilePath?: string, public readonly secret?: string) {
         this.init();
     }
     private init(): BotConfig {
