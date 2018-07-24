@@ -7,8 +7,12 @@ export interface IBotConfiguration {
     , description?: string
     , secretKey?: string
     , services: IServiceBase[]
-    , getService: (type: string, name?: string) => Service
     , decrypt: (value: string, secret: string) => string
+    , Endpoint: (name?: string) => IEndpointService 
+    , AzureBotService: (name?: string) => IAzureBotService 
+    , LUIS: (name?: string) => ILUISService 
+    , QnAMaker: (name?: string) => IQnAMakerService
+    , Dispatch: (name?: string) => IDispatchService
 };
 
 export interface IServiceBase {

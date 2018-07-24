@@ -1,6 +1,6 @@
 {
   "name": "botbuilder-config",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Configuration helper for consuming and decrypting Microsoft Bot Framework bot files.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",

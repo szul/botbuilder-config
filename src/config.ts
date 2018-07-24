@@ -78,18 +78,6 @@ export class BotConfig implements IBotConfiguration {
         }
         return new Service(services[0]);
     }
-    public getService(type: string, name?: string): Service {
-        switch(type.toLowerCase()) {
-            case "endpoint":
-            case "abs":
-            case "luis":
-            case "qna":
-            case "dispatch":
-                this.parseService(type, name);
-            default:
-                throw new Error("Error: Invalid Bot Service [type] specified.");
-        }
-    }
     public decrypt(value: string, secret: string): string {
         //Decryption values sourced from Microsoft's MSBot CLI source code. If this breaks, look there to see if values have changed.
         try {
