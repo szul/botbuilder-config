@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 /**
  * @module botbuilder-config
  */
@@ -7,7 +9,9 @@ export interface IBotConfiguration {
     , description?: string
     , secretKey?: string
     , services: IServiceBase[]
+    , encrypt: (value: string, secret: string) => string
     , decrypt: (value: string, secret: string) => string
+    , decryptAll: () => IBotConfiguration
     , Endpoint: (name?: string) => IEndpointService 
     , AzureBotService: (name?: string) => IAzureBotService 
     , LUIS: (name?: string) => ILUISService 

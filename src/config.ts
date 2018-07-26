@@ -21,6 +21,9 @@ export class BotConfig implements IBotConfiguration {
         qna: ["subscriptionKey"],
         dispatch: ["authoringKey", "subscriptionKey"]
     }; //Encrypted properties sourced from Microsoft's MSBot CLI source code.
+    private readonly _algorithm: string = "aes192";
+    private readonly _base64: crypto.HexBase64BinaryEncoding = "hex";
+    private readonly _ascii: crypto.Utf8AsciiBinaryEncoding = "utf8";
     public name: string;
     public description: string;
     public secretKey: string;
@@ -78,12 +81,34 @@ export class BotConfig implements IBotConfiguration {
         }
         return new Service(services[0]);
     }
-    public decrypt(value: string, secret: string): string {
-        //Decryption values sourced from Microsoft's MSBot CLI source code. If this breaks, look there to see if values have changed.
+    public decryptAll(): BotConfig {
+        var self = this;
+        self.services.forEach((s: Service, idx: number) => {
+            let encryptedProps: string[] = self._encryptedProperties[s.type];
+            for(let k in s) {
+                if(s.hasOwnProperty(k) && encryptedProps.indexOf(k) != -1 && s[k] != "") {
+                    s[k] = self.decrypt(s[k]);
+                }
+            }
+        });
+        return self;
+    }
+    public encrypt(value: string): string {
         try {
-            const decipher = crypto.createDecipher("aes192", secret);
-            let prop = decipher.update(value, "hex", "utf8");
-            prop += decipher.final("utf8");
+            const c = crypto.createCipher(this._algorithm, this.secret);
+            let v = c.update(value, this._ascii, this._base64);
+            v += c.final(this._base64);
+            return v;
+        }
+        catch(e) {
+            console.log(`Error: Encryption of ${value} failed.`);
+        }
+    }
+    public decrypt(value: string): string {
+        try {
+            const d = crypto.createDecipher(this._algorithm, this.secret);
+            let prop = d.update(value, this._base64, this._ascii);
+            prop += d.final(this._ascii);
             return prop;
         }
         catch(e) {
