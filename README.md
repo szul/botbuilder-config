@@ -2,6 +2,8 @@
 
 Configuration helper for consuming and decrypting Microsoft Bot Framework bot files.
 
+[![Build Status](https://travis-ci.org/szul/botbuilder-config.svg?branch=master)](https://travis-ci.org/szul/botbuilder-config)
+
 ## Installation
 
 To install:
