@@ -1,0 +1,3 @@
+# BotBuilder Configuration Parser (.NET Core)
+
+Coming soon...
