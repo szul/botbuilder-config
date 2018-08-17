@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "postinstall": "tsc -p .",
+    "postinstall": "./node_modules/.bin/tsc -p .",
     "test": "./node_modules/.bin/mocha"
   },
   "repository": {
