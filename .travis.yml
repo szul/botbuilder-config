@@ -5,6 +5,7 @@ before_script:
   - cd ./nodejs
 
 script:
+  - npm install
   - npm run postinstall
 
 after_script:
