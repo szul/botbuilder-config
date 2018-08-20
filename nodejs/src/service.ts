@@ -19,6 +19,11 @@ export interface IBotConfiguration {
     , Dispatch: (name?: string) => IDispatchService
 };
 
+export interface BotConfigurationOptions {
+    botFilePath?: string
+    , secret?: string
+};
+
 export interface IServiceBase {
     type: string
     , name?: string

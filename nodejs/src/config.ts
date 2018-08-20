@@ -1,4 +1,4 @@
-import { IBotConfiguration, Service, IServiceBase  } from "./service"
+import { IBotConfiguration, Service, IServiceBase, BotConfigurationOptions  } from "./service"
 import { AzureBotService } from "./azurebotservice";
 import { DispatchService } from "./dispatch";
 import { EndpointService } from "./endpoint";
@@ -28,7 +28,8 @@ export class BotConfig implements IBotConfiguration {
     public description: string;
     public secretKey: string;
     public services: IServiceBase[];
-    constructor(public readonly botFilePath?: string, public readonly secret?: string) {
+    constructor(public options?: BotConfigurationOptions) {
+        this.options = this.options || {};
         this.init();
     }
     private init(): BotConfig {
@@ -41,7 +42,7 @@ export class BotConfig implements IBotConfiguration {
         return this;
     }
     private parseBotFile(): IBotConfiguration {
-        let botFile = (this.botFilePath !== null) ? this.botFilePath : this.getBotFileInDirectory();
+        let botFile = (this.options.botFilePath !== null) ? this.options.botFilePath : this.getBotFileInDirectory();
         return this.parse(botFile);
     }
     private getBotFileInDirectory(): string {
@@ -95,7 +96,7 @@ export class BotConfig implements IBotConfiguration {
     }
     public encrypt(value: string): string {
         try {
-            const c = crypto.createCipher(this._algorithm, this.secret);
+            const c = crypto.createCipher(this._algorithm, this.options.secret);
             let v = c.update(value, this._ascii, this._base64);
             v += c.final(this._base64);
             return v;
@@ -106,7 +107,7 @@ export class BotConfig implements IBotConfiguration {
     }
     public decrypt(value: string): string {
         try {
-            const d = crypto.createDecipher(this._algorithm, this.secret);
+            const d = crypto.createDecipher(this._algorithm, this.options.secret);
             let prop = d.update(value, this._base64, this._ascii);
             prop += d.final(this._ascii);
             return prop;
