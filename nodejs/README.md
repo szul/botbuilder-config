@@ -20,7 +20,7 @@ To import the module:
 
 To instantiate the configuration:
 
-    let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
+    let c = new BotConfig({ botFilePath: "PATH_TO_BOT_FILE", secret: "SECRET" });
 
 ### TypeScript
 
@@ -30,9 +30,9 @@ To import the module:
 
 To instantiate the configuration:
 
-    let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
+    let c = new BotConfig({ botFilePath: "PATH_TO_BOT_FILE", secret: "SECRET" });
 
-> Both the bot file path and the secret are optional parameters. If the bot file is not specified, it will look in the current working directory of the bot. If the secret is not specified, it will assume that the bot file does not have any encrypted properties.
+> Both the bot file path and the secret are optional properties of a `BotConfigurationOptions` parameter. If the bot file is not specified, it will look in the current working directory of the bot. If the secret is not specified, it will assume that the bot file does not have any encrypted properties.
 
 ### Services
 
@@ -55,12 +55,12 @@ Given the above instantiation (where `c` is the `BotConfig` object), you can acc
 
 You could load and access the bot file by simply loading the bot file as JSON into your application. The advantage of this library is that it will decrypt your properties, if you have encrypted them with a secret.
 
-    let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET");
+    let c = new BotConfig({ botFilePath: "PATH_TO_BOT_FILE", secret: "SECRET" });
     let s = c.decrypt(c.QnAMaker().subscriptionKey)
     console.log(s); //"s" will be decrypted;
 
 You can also decrypt everything ahead of time.
 
-    let c = new BotConfig("PATH_TO_BOT_FILE", "SECRET").decryptAll();
+    let c = new BotConfig({ botFilePath: "PATH_TO_BOT_FILE", secret: "SECRET" });
     let s = c.QnAMaker().subscriptionKey
     console.log(s); //"s" will be decrypted;
