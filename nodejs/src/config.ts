@@ -5,6 +5,7 @@ import { EndpointService } from "./endpoint";
 import { LUISService } from "./luis";
 import { QnAMakerService } from "./qnamaker";
 import {AzureTableStorageService } from "./azuretablestorage";
+import { AzureBlobStorageService } from "./azureblobstorage";
 import * as fs from "fs";
 import * as shelljs from "shelljs";
 import * as path from "path";
@@ -89,7 +90,27 @@ export class BotConfig implements IBotConfiguration {
         }
         return new Service(services[0]);
     }
-    public decryptAll(): BotConfig {
+    public getService(type: string, name?: string): Service {
+        switch(type.toLowerCase()) {
+            case "endpoint":
+                return <EndpointService>this.parseService(type, name);
+            case "abs":
+                return <AzureBotService>this.parseService(type, name);
+            case "luis":
+                return <LUISService>this.parseService(type, name);
+            case "qna":
+                return <QnAMakerService>this.parseService(type, name);
+            case "dispatch":
+                return <DispatchService>this.parseService(type, name);
+            case "ats":
+                return <AzureTableStorageService>this.parseService(type, name);
+            case "blob":
+                return <AzureBlobStorageService>this.parseService(type, name);
+            default:
+                throw new Error(`Error: Invalid Bot Service [${type}] specified.`);
+        }
+    }
+    public decryptAll(): IBotConfiguration {
         var self = this;
         self.services.forEach((s: Service, idx: number) => {
             let encryptedProps: string[] = self._encryptedProperties[s.type];
@@ -140,5 +161,8 @@ export class BotConfig implements IBotConfiguration {
     }
     public AzureTableStorage(name?: string): AzureTableStorageService {
         return <AzureTableStorageService>this.parseService("ats", name);
+    }
+    public AzureBlobStorage(name?: string): AzureBlobStorageService {
+        return <AzureBlobStorageService>this.parseService("blob", name);
     }
 }

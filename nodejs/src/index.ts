@@ -9,5 +9,6 @@
  export * from "./luis";
  export * from "./qnamaker";
  export * from "./azuretablestorage";
+ export * from "./azureblobstorage";
  export * from "./config";
  
