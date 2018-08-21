@@ -12,7 +12,7 @@ script:
 after_script:
   - npm run test
  
- deploy:
+deploy:
   provider: npm
   email: "michael@szul.us"
   api_key:
