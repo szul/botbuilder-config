@@ -4,6 +4,7 @@ import { DispatchService } from "./dispatch";
 import { EndpointService } from "./endpoint";
 import { LUISService } from "./luis";
 import { QnAMakerService } from "./qnamaker";
+import {AzureTableStorageService } from "./azuretablestorage";
 import * as fs from "fs";
 import * as shelljs from "shelljs";
 import * as path from "path";
@@ -13,14 +14,20 @@ import * as crypto from "crypto";
  * @module botbuilder-config
  */
 
+/*
+ * Encrypted properties sourced from Microsoft's MSBot CLI source code.
+ * 
+ */
+
 export class BotConfig implements IBotConfiguration {
     private readonly _encryptedProperties = {
         endpoint: ["appPassword"],
         abs: ["appPassword"],
         luis: ["authoringKey", "subscriptionKey"],
         qna: ["subscriptionKey"],
-        dispatch: ["authoringKey", "subscriptionKey"]
-    }; //Encrypted properties sourced from Microsoft's MSBot CLI source code.
+        dispatch: ["authoringKey", "subscriptionKey"],
+        ats: ["storageKey"]
+    };
     private readonly _algorithm: string = "aes192";
     private readonly _base64: crypto.HexBase64BinaryEncoding = "hex";
     private readonly _ascii: crypto.Utf8AsciiBinaryEncoding = "utf8";
@@ -130,5 +137,8 @@ export class BotConfig implements IBotConfiguration {
     }
     public Dispatch(name?: string): DispatchService {
         return <DispatchService>this.parseService("dispatch", name);
+    }
+    public AzureTableStorage(name?: string): AzureTableStorageService {
+        return <AzureTableStorageService>this.parseService("ats", name);
     }
 }

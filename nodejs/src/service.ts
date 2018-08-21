@@ -67,6 +67,13 @@ export interface IQnAMakerService extends IService {
 export interface IDispatchService extends ILUISService {
 };
 
+export interface IAzureTableStorageService extends IService {
+    tableName: string
+    , storageKey: string
+    , storageName?: string
+    , connectionString?: string
+}
+
 export class Service implements IService {
     public type: string;
     public name: string;
