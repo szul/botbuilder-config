@@ -1,5 +1,7 @@
 # BotBuilder Configuration Parser (Node.JS)
 
+> Note: This package has been moved to the [Bot Builder Community JS](https://github.com/BotBuilderCommunity/botbuilder-community-js) repository. For all updates, issues, etc. please go there.
+
 Configuration helper for consuming and decrypting Microsoft Bot Framework bot files.
 
 [![Build Status](https://travis-ci.org/szul/botbuilder-config.svg?branch=master)](https://travis-ci.org/szul/botbuilder-config)
